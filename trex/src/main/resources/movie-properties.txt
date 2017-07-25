@@ -1,0 +1,15 @@
+http://dbpedia.org/ontology/Work/runtime
+http://dbpedia.org/ontology/abstract
+http://dbpedia.org/ontology/director
+http://dbpedia.org/ontology/distributor
+http://dbpedia.org/ontology/budget
+http://dbpedia.org/ontology/gross
+http://dbpedia.org/ontology/starring
+http://dbpedia.org/ontology/musicComposer
+http://dbpedia.org/ontology/producer
+http://dbpedia.org/ontology/writer
+http://dbpedia.org/property/country
+http://dbpedia.org/property/language
+http://www.w3.org/2000/01/rdf-schema#label
+http://xmlns.com/foaf/0.1/isPrimaryTopicOf
+http://purl.org/dc/terms/subject
