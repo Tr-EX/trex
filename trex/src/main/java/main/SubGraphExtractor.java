@@ -23,14 +23,25 @@ public class SubGraphExtractor {
 	private static String buildQuery() {
 		List<String> movieRscUris = FileReader.readLines("src/main/resources/movie-resources.txt");
 		List<String> moviePrpUris = FileReader.readLines("src/main/resources/movie-properties.txt");
-		List<String> actorPrpUris = FileReader.readLines("src/main/resources/actor-properties.txt");
-		List<String> directorPrpUris = FileReader.readLines("src/main/resources/director-properties.txt");
-		String valuesQuery = "SELECT * WHERE {?s ?p ?o} VALUES (?s) { ";
+//		List<String> actorPrpUris = FileReader.readLines("src/main/resources/actor-properties.txt");
+//		List<String> directorPrpUris = FileReader.readLines("src/main/resources/director-properties.txt");
+		String valuesQuery = "CONSTRUCT {?s ?p ?o.}"
+//		String valuesQuery = "SELECT *"
+				+ " WHERE {{?s ?p ?o. FILTER (?p IN(";
+		for (int i = 0; i < moviePrpUris.size(); i++) {
+			String moviePrpUri = moviePrpUris.get(i);
+			valuesQuery += "<" + moviePrpUri + ">";
+			if (i < moviePrpUris.size() - 1) {
+				valuesQuery += ",";
+			}
+		}
+		valuesQuery += "))";
+		valuesQuery += "} VALUES (?s) {";
 		String compositeLine = "";
 		for (String movieRscUri : movieRscUris) {
 			compositeLine += "(" + " <" + movieRscUri + "> " + ")";
 		}
-		valuesQuery += compositeLine + "} ";
+		valuesQuery += compositeLine + "}}";
 		return valuesQuery;
 	}
 
