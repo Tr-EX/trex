@@ -27,14 +27,13 @@ public class QueryManager {
 		qexec.close();
 	}
 
-	public static void runQuery(String queryString, String endpoint) {
+	public static Model runQuery(String queryString, String endpoint) {
 		Query query = QueryFactory.create(queryString);
 		System.out.println(query);
 		QueryExecution qe = QueryExecutionFactory.sparqlService(endpoint, query);
-//		ResultSet resultSet = qe.execSelect();
-//		ResultSetFormatter.out(resultSet);
-		Model model = qe.execConstruct();
-		model.write(System.out);
+		// ResultSet resultSet = qe.execSelect();
+		// ResultSetFormatter.out(resultSet);
+		return qe.execConstruct();
 	}
 
 }
