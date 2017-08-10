@@ -1,0 +1,11 @@
+http://dbpedia.org/ontology/abstract
+http://www.w3.org/2003/01/geo/wgs84_pos#lat
+http://www.w3.org/2003/01/geo/wgs84_pos#long
+http://www.w3.org/1999/02/22-rdf-syntax-ns#type
+http://xmlns.com/foaf/0.1/isPrimaryTopicOf
+http://www.w3.org/2000/01/rdf-schema#label
+http://dbpedia.org/ontology/country
+http://dbpedia.org/ontology/governmentType
+http://dbpedia.org/ontology/leader
+http://dbpedia.org/ontology/ethnicGroup
+http://dbpedia.org/ontology/language
