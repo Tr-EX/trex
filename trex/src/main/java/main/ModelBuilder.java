@@ -1,32 +1,41 @@
 package main;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import com.hp.hpl.jena.query.QuerySolution;
-import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.RDFNode;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 public class ModelBuilder {
 
-	static Model buildModel(List<String> rscUriList, List<String> prpUriList) {
-		String filmQuery = QueryManager.buildQuery(rscUriList, prpUriList, Constants.CONSTRUCT_S_P_O, Constants.S_P_O, Constants.SUBJECT_VAR_NAME);
-		Model movieModel = QueryManager.runConstructQuery(filmQuery, Constants.DBPEDIA_ENDPOINT);
-		return movieModel;
+	public static Model buildModel(List<String> rscUriList, List<String> prpUriList) {
+		if (rscUriList.size() > 1000) {
+			Model model = ModelFactory.createDefaultModel();
+			int startIndex = 0;
+			int remainingSize = rscUriList.size();
+			while (remainingSize >= 1000) {
+				int endIndex = findEndIndex(rscUriList, startIndex, remainingSize);
+				String query = QueryManager.buildQuery(rscUriList, prpUriList, Constants.CONSTRUCT_S_P_O,
+						Constants.S_P_O, Constants.SUBJECT_VAR_NAME, startIndex, endIndex);
+				model.add(QueryManager.runConstructQuery(query, Constants.DBPEDIA_ENDPOINT));
+				startIndex += 1000;
+				remainingSize -= 1000;
+			}
+			return model;
+		} else {
+			String query = QueryManager.buildQuery(rscUriList, prpUriList, Constants.CONSTRUCT_S_P_O, Constants.S_P_O,
+					Constants.SUBJECT_VAR_NAME, 0, rscUriList.size());
+			return QueryManager.runConstructQuery(query, Constants.DBPEDIA_ENDPOINT);
+		}
 	}
 
-	static List<String> buildUriList(Model model, String query, String varName) {
-		List<String> rscUris = new ArrayList<String>();
-		ResultSet resultSet = QueryManager.runSelectQueryOnModel(query, model);
-		while (resultSet.hasNext()) {
-			QuerySolution querySolution = (QuerySolution) resultSet.next();
-			RDFNode rdfNode = querySolution.get(varName);
-			if (rdfNode.isResource()) {
-				rscUris.add(rdfNode.asResource().getURI());
-			}
+	private static int findEndIndex(List<String> rscUriList, int startIndex, int remainingSize) {
+		int endIndex = 0;
+		if (remainingSize >= 1000) {
+			endIndex = startIndex + 1000;
+		} else {
+			endIndex = rscUriList.size();
 		}
-		return rscUris;
+		return endIndex;
 	}
 
 }
