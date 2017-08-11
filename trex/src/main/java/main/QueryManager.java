@@ -48,7 +48,8 @@ public class QueryManager {
 		return resultSet;
 	}
 
-	static String buildQuery(List<String> rscUris, List<String> prpUris, String queryInitial, String queryBody) {
+	static String buildQuery(List<String> rscUris, List<String> prpUris, String queryInitial, String queryBody,
+			String varName) {
 		String valuesQuery = queryInitial
 				// String valuesQuery = "SELECT *"
 				+ " WHERE {{" + queryBody;
@@ -56,7 +57,7 @@ public class QueryManager {
 			valuesQuery = QueryManager.addFilterWithProps(prpUris, valuesQuery);
 		}
 		valuesQuery += "} ";
-		valuesQuery = QueryManager.addValuesWithObjects(rscUris, valuesQuery, Constants.SUBJECT);
+		valuesQuery = QueryManager.addValuesWithObjects(rscUris, valuesQuery, varName);
 		valuesQuery += "}}";
 		return valuesQuery;
 	}
