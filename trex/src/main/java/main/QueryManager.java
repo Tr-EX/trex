@@ -3,9 +3,7 @@ package main;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-
-import org.apache.jena.atlas.web.auth.HttpAuthenticator;
-import org.apache.jena.riot.RDFLanguages;
+import java.util.List;
 
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
@@ -13,7 +11,6 @@ import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.sparql.engine.http.QueryEngineHTTP;
 
 public class QueryManager {
 
@@ -31,14 +28,15 @@ public class QueryManager {
 
 	public static Model runConstructQuery(String queryString, String endpoint) {
 		Query query = QueryFactory.create(queryString);
-//		System.out.println(query);
-//		@SuppressWarnings("resource")
-//		QueryEngineHTTP engineHTTP = new QueryEngineHTTP(endpoint, query, (HttpAuthenticator) null);
-//		engineHTTP.setModelContentType(RDFLanguages.strLangRDFXML);
-//		Model model = engineHTTP.execConstruct();
+		// System.out.println(query);
+		// @SuppressWarnings("resource")
+		// QueryEngineHTTP engineHTTP = new QueryEngineHTTP(endpoint, query,
+		// (HttpAuthenticator) null);
+		// engineHTTP.setModelContentType(RDFLanguages.strLangRDFXML);
+		// Model model = engineHTTP.execConstruct();
 		QueryExecution qe = QueryExecutionFactory.sparqlService(endpoint, query);
 		Model model = qe.execConstruct();
-//		qe.close();
+		// qe.close();
 		return model;
 	}
 
@@ -46,8 +44,44 @@ public class QueryManager {
 		Query query = QueryFactory.create(queryString);
 		QueryExecution qe = QueryExecutionFactory.create(query, model);
 		ResultSet resultSet = qe.execSelect();
-//		qe.close();
+		// qe.close();
 		return resultSet;
+	}
+
+	static String buildQuery(List<String> rscUris, List<String> prpUris, String queryInitial, String queryBody) {
+		String valuesQuery = queryInitial
+				// String valuesQuery = "SELECT *"
+				+ " WHERE {{" + queryBody;
+		if (prpUris != null && !prpUris.isEmpty()) {
+			valuesQuery = QueryManager.addFilterWithProps(prpUris, valuesQuery);
+		}
+		valuesQuery += "} ";
+		valuesQuery = QueryManager.addValuesWithObjects(rscUris, valuesQuery, Constants.SUBJECT);
+		valuesQuery += "}}";
+		return valuesQuery;
+	}
+
+	static String addValuesWithObjects(List<String> rscUris, String valuesQuery, String varName) {
+		valuesQuery += "VALUES (?" + varName + ") {";
+		String compositeLine = "";
+		for (String rscUri : rscUris) {
+			compositeLine += "(" + " <" + rscUri + "> " + ")";
+		}
+		valuesQuery += compositeLine;
+		return valuesQuery;
+	}
+
+	static String addFilterWithProps(List<String> entityPrpUris, String valuesQuery) {
+		valuesQuery += "FILTER (?p IN(";
+		for (int i = 0; i < entityPrpUris.size(); i++) {
+			String moviePrpUri = entityPrpUris.get(i);
+			valuesQuery += "<" + moviePrpUri + ">";
+			if (i < entityPrpUris.size() - 1) {
+				valuesQuery += ",";
+			}
+		}
+		valuesQuery += "))";
+		return valuesQuery;
 	}
 
 }
