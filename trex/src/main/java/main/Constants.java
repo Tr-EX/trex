@@ -16,6 +16,7 @@ public class Constants {
 	public final static String DBPEDIA_ENDPOINT = "http://dbpedia.org/sparql";
 	public final static String LMDB_ENDPOINT = "http://www.linkedmdb.org/sparql";
 	public static final String MODEL_FILE_PATH = "src/main/resources/mainModel.ttl";
+	public static final String MODEL_FILE_PATH2 = "src/main/resources/mainModel2.ttl";
 	public static final String DIRECTOR_QUERY_BODY = "?s <http://dbpedia.org/ontology/director> ?o";
 	public static final String ACTOR_QUERY_BODY = "?s <http://dbpedia.org/ontology/starring> ?o";
 	public static final String MUSIC_COMPOSER_QUERY_BODY = "?s <http://dbpedia.org/ontology/musicComposer> ?o";

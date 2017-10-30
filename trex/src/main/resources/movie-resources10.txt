@@ -1,0 +1,10 @@
+http://dbpedia.org/resource/Armageddon_(1998_film)
+http://dbpedia.org/resource/The_Sixth_Sense
+http://dbpedia.org/resource/Titanic_(1997_film)
+http://dbpedia.org/resource/Wicker_Park_(film)
+http://dbpedia.org/resource/Donnie_Darko
+http://dbpedia.org/resource/Independence_Day_(1996_film)
+http://dbpedia.org/resource/Indiana_Jones_and_the_Last_Crusade
+http://dbpedia.org/resource/The_Da_Vinci_Code_(film)
+http://dbpedia.org/resource/Return_of_the_Jedi
+http://dbpedia.org/resource/Django_Unchained

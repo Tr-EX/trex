@@ -1,13 +1,14 @@
 package main;
 
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.jena.riot.Lang;
 
-import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -131,7 +132,8 @@ public class GraphBuilder {
 		mainModel.add(writtenMovieModel);
 		mainModel.add(distributedMovieModel);
 		mainModel.add(composedMovieModel);
-		mainModel.write(new FileWriter(new File(Constants.MODEL_FILE_PATH)), Lang.TTL.getName());
+//		mainModel.write(new FileWriter(new File(Constants.MODEL_FILE_PATH2)), Lang.TTL.getName());
+		mainModel.write(new OutputStreamWriter(new FileOutputStream(new File(Constants.MODEL_FILE_PATH2)), StandardCharsets.UTF_8), Lang.TTL.getName());
 
 	}
 
