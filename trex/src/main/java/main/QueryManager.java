@@ -3,6 +3,8 @@ package main;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 
 import org.apache.jena.riot.Lang;
@@ -18,6 +20,8 @@ import com.hp.hpl.jena.rdf.model.Model;
 
 public class QueryManager {
 
+	private static final String DBPEDIA_RSC_URISPACE = "http://dbpedia.org/resource/";
+
 	public static void writeModel(String queryString, String endpoint, String outputFilePath) {
 		Query query = QueryFactory.create(queryString);
 		QueryExecution qexec = QueryExecutionFactory.sparqlService(endpoint, query);
@@ -32,6 +36,7 @@ public class QueryManager {
 
 	public static Model runConstructQuery(String queryString, String endpoint) {
 		Query query = QueryFactory.create(queryString);
+		System.out.println(query);
 		QueryExecution qe = QueryExecutionFactory.sparqlService(endpoint, query);
 		Model model = qe.execConstruct();
 		qe.close();
@@ -40,6 +45,7 @@ public class QueryManager {
 
 	public static ResultSet runSelectQuery(String queryString, String endpoint) {
 		Query query = QueryFactory.create(queryString);
+		System.out.println(query);
 		QueryExecution qe = QueryExecutionFactory.sparqlService(endpoint, query);
 		ResultSet resultSet = qe.execSelect();
 		ResultSetRewindable setRewindable = ResultSetFactory.makeRewindable(resultSet);
@@ -74,7 +80,14 @@ public class QueryManager {
 		String compositeLine = "";
 		for (int i = startIndex; i < endIndex; i++) {
 			String rscUri = rscUris.get(i);
-			compositeLine += "(" + " <" + rscUri + "> " + ")";
+			String identifier = rscUri.replaceAll(DBPEDIA_RSC_URISPACE,"");//remove namespace part to encod second part to assci mode
+			
+			try {
+				identifier = URLEncoder.encode(identifier,"UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+			compositeLine += "(" + " <" + DBPEDIA_RSC_URISPACE+identifier + "> " + ")";
 		}
 		valuesQuery += compositeLine;
 		return valuesQuery;
