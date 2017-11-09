@@ -141,7 +141,7 @@ public class GraphBuilder {
 		personPrpUris = FileReader.readLines("src/main/resources/person-properties.txt");
 		locationPrpUris = FileReader.readLines("src/main/resources/location-properties.txt");
 		moviePrpUris = FileReader.readLines("src/main/resources/movie-properties.txt");
-		movieRscUris = FileReader.readLines("src/main/resources/movie-resources.txt");
+		movieRscUris = FileReader.readLines("src/main/resources/movie-resources_cleaned_by_py.txt");
 	}
 
 }

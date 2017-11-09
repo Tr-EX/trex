@@ -1,6 +1,7 @@
 package main;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -16,6 +17,13 @@ public class ModelBuilder {
 				int endIndex = findEndIndex(rscUriList, startIndex, remainingSize);
 				String query = QueryManager.buildQuery(rscUriList, prpUriList, Constants.CONSTRUCT_S_P_O,
 						Constants.S_P_O, Constants.SUBJECT_VAR_NAME, startIndex, endIndex);
+				System.out.println("query from movies main model in ModelBuilder.buildModel() line 19:\n"+query);
+				try {
+					TimeUnit.SECONDS.sleep(15);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				model.add(QueryManager.runConstructQuery(query, Constants.DBPEDIA_ENDPOINT));
 				startIndex += 1000;
 				remainingSize -= 1000;

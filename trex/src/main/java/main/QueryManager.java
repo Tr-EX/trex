@@ -17,6 +17,7 @@ import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.ResultSetFactory;
 import com.hp.hpl.jena.query.ResultSetRewindable;
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 public class QueryManager {
 
@@ -35,11 +36,16 @@ public class QueryManager {
 	}
 
 	public static Model runConstructQuery(String queryString, String endpoint) {
+		Model model = ModelFactory.createDefaultModel();
 		Query query = QueryFactory.create(queryString);
-		System.out.println(query);
-		QueryExecution qe = QueryExecutionFactory.sparqlService(endpoint, query);
-		Model model = qe.execConstruct();
-		qe.close();
+		try {			
+			QueryExecution qe = QueryExecutionFactory.sparqlService(endpoint, query);
+			model = qe.execConstruct();
+			qe.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println(query);
+		}
 		return model;
 	}
 
@@ -80,14 +86,15 @@ public class QueryManager {
 		String compositeLine = "";
 		for (int i = startIndex; i < endIndex; i++) {
 			String rscUri = rscUris.get(i);
-			String identifier = rscUri.replaceAll(DBPEDIA_RSC_URISPACE,"");//remove namespace part to encod second part to assci mode
-			
-			try {
-				identifier = URLEncoder.encode(identifier,"UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
+			if(rscUri.startsWith(DBPEDIA_RSC_URISPACE)) {
+				String identifier = rscUri.split("resource/")[1];//remove namespace part to encod second part to assci mode
+				try {
+					identifier = URLEncoder.encode(identifier,"UTF-8");
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}
+				compositeLine += "(" + " <" + DBPEDIA_RSC_URISPACE+identifier + "> " + ")";
 			}
-			compositeLine += "(" + " <" + DBPEDIA_RSC_URISPACE+identifier + "> " + ")";
 		}
 		valuesQuery += compositeLine;
 		return valuesQuery;

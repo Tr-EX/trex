@@ -1,0 +1,14 @@
+select distinct ?film where {
+?film <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://dbpedia.org/ontology/Film>.
+OPTIONAL{
+?film <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/CreativeWork>.
+?film <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Movie>.
+?film <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://dbpedia.org/class/yago/WikicatIndependentFilms>.
+?film <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://dbpedia.org/class/yago/WikicatEnglish-languageFilms>.
+?film <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://dbpedia.org/class/yago/WikicatAmericanFilms>.
+?film <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://dbpedia.org/class/yago/WikicatAmericanScienceFictionFilms>.
+ 
+}
+
+
+  } OFFSET 150001 LIMIT 160000
